@@ -1,0 +1,37 @@
+<div id="response">Resolving brain address...</div>
+<script type="text/javascript">
+const sanitize = (s) => s.slice(0,100).replace('(','&#40;');
+
+let atlas = location.pathname;
+if (atlas.charAt(0)=='/') atlas = atlas.slice(1);
+let loc = location.search;
+if (loc.charAt(0)=='?') loc = loc.slice(1);
+const html = ['<h3>Parsing address "brainaddress:'+atlas+'?'+loc+'".</h3>'];
+const errors = [];
+html.push('<ul>');
+atlas = atlas.split('/');
+if (atlas.length === 2) {
+  html.push('<li>The provider is "'+atlas[0]+'".</li>');
+  html.push('<li>The brain atlas is "'+atlas[1]+'".</li>');
+} else {
+  errors.push('Cannot parse provider/atlas "'+sanitize(atlas.join('/'))+'"');
+}
+const dict = {};
+console.log(loc)
+loc = loc.split('&');
+for (let i=0; i<loc.length; i++) {
+  const kv = loc[i].split('=');
+  if (kv.length === 2) dict[kv[0]] = kv[1];
+  else errors.push('Cannot parse parameter "'+sanitize(kv.join('='))+'"');  
+}
+html.push('<li>The location parameters are '+JSON.stringify(dict)+'.</li>');
+if (errors.length) {
+  html.push('<li>The parser encountered '+errors.length+' errors:</li>');
+  html.push('<ul>');
+  for (let i=0; i<errors.length; i++) {
+    html.push('<li>'+errors[i]+'</li>');
+  }
+  html.push('</ul>');
+}
+document.getElementById('response').innerHTML = html.join('\n');
+</script>

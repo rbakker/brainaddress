@@ -13,11 +13,11 @@ For example, the address
 `brainaddress:sba/ABA_v3?coord=1,2,3`
 points to coordinate (1,2,3) in atlas *ABA_v3* hosted by provider *sba*.
 
-Skip the long read, paste a brain address here to resolve it: <div><input type="text" size="100" onclick="lookup(this)"/><div>
+Skip the long read, paste a brain address here to resolve it: <input type="text" size="100" onchange="lookup(event)"/>
 
 The BAS solves a number of common issues with brain coordinates:
 - **issue**: Brain atlases are often published in the form of a data set, like an (average) MRI image or a stack of histological sections. To properly define a real-world coordinate in this data set, one needs to know: how the data is oriented in real-world space, what the point (0,0,0) refers to, and what the units are.  
-**solution**: The atlas providers host for each atlas a *definition file* that contains default settings for orientation, origin and units.
+**solution**: The atlas providers host for each atlas a *definition file* that contains default (and alternative) settings for orientation, origin and units.
 - **issue**: Existing data that refers to a brain atlas may not use the same orientation, origin and units as the defaults specified by the atlas provider.  
 **solution**: In the location part of the address, the alternative orientation, origin and units can be specified. In fact, it is recommended that these are always specified to make the address more self-contained.
 - **issue**: When brain atlases are published, they often do not come with an acronym. Different user groups of the atlas use their own name to refer to it.  
@@ -25,7 +25,7 @@ The BAS solves a number of common issues with brain coordinates:
 - **issue**: Volumetric data (such as MRI) files typically contain transformations from voxel space to real-world space, but there is often no meta-data field to describe what atlas this real-world space is aligned with.  
 **solution**: Depending on the situation, the applicable *brain atlas* can be specified as
   1. An additional meta-data field, either inside or separate from the file.
-  - Part of the filename, using the *tokenized* form of the brain address.
+  2. Part of the filename, using the *tokenized* form of the brain address.
 
 The BAS solves the above issues, but may raise some questions:
 - **Q**: A brain address contains provider and atlas acronyms, how to interpret these?  
@@ -49,7 +49,9 @@ To become a provider, register at https://brainaddress.org/providers/signup.md w
   If you <a href="docs/atlasdefinition.md">follow the instructions</a>, these files are auto-discovered and cached by brainaddress.org.
 
 <script type="text/javascript">
-function lookup(elem) {
-  console.log(elem);
+function lookup(evt) {
+  const addr = evt.target.value;
+  const matches = addr.match(/brainaddress:([^\/]+\/[^?]+)\?([^=]+=[^&])*/)
+  console.log(event,addr,matches);
 }
 </script>
