@@ -1,0 +1,12 @@
+{
+  "bas": {
+    "name": "Brain Addressing System",
+    "url": "https://brainaddress.org",
+    "basUrl": "https://github.com/rbakker/brainaddress/tree/master/BAS"
+  },
+  "sba": {
+    "name": "Scalable Brain Atlas",
+    "url": "https://scalablebrainatlas.incf.org",
+    "basUrl": "https://scalablebrainatlas.incf.org/BAS"
+  }
+}
