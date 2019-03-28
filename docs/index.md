@@ -27,9 +27,9 @@ BAS solves a number of common issues with brain coordinates:
 
 BAS is designed to be simple. We hope the list of frequently asked questions will remain short:
 - **Q**: A brain address contains provider and atlas acronyms, how to interpret these?  
-**A**: This website (brainaddress.org) maintains an automatically updated list of providers and (versioned) atlas definition files that they host, at <a href="providers">https://brainaddress.org/providers</a>. In addition, the URL-version of a brain address (replace `brainaddress:` by `https://brainaddress.org/`) points to a page with information about the address, its atlas and available tools/viewers.
+**A**: This website (brainaddress.org) maintains an automatically updated list of providers and (versioned) atlas definition files that they host, at <a href="providers.html">https://brainaddress.org/providers.html</a>. In addition, the URL-version of a brain address (replace `brainaddress:` by `https://brainaddress.org/`) points to a page with information about the address, its atlas and available tools/viewers.
 - **Q**: Multiple providers may use the same brain atlas but use different acronyms and definition files for it.  
-**A**: Besides hosting *atlases*, atlas providers can also host *transforms*, *transformations* (which apply *transforms* to map data between atlases) and *ROI-shapes* (which define regions of interest). They can use the identity transform to link their atlas to the same atlas hosted by other parties and vice versa.
+**A**: Besides hosting *atlases*, atlas providers can also host *transforms*, *transformations* (which apply *transforms* to map data between atlases) and *ROI-generators* (which define regions of interest). They can use the identity transform to link their atlas to the same atlas hosted by other parties and vice versa.
 - **Q**: A data set is aligned to an atlas that is not defined by any provider. What to do?  
 **A**: Either become a provider and define the atlas (see below). 
 If that is too much work, use the special provider acronym `my` that indicates a private atlas. You can link a `brainaddress:my.<atlas>` address to a known atlas later, by defining a transformation.
@@ -44,12 +44,12 @@ The address can also be written as a shorthand that is designed to be used as pa
 ## Become a provider
 A BAS provider does not need to 'own' or host brain atlases. The provider only hosts *definition files* that describe atlases, transforms or transformations. For the hosting, the provider can use a website or a github repository.
 The system is open to organizations or individuals who want to provide brain atlas definitions or transformations.
-To become a provider, register at https://brainaddress.org/provider-signup.md. You will need:
+To become a provider, follow the <a href="provider-instructions.html">detailed provider instructions</a>. You will need:
 - a provider acronym
 - a provider home page or github repository
-- a provider content page (github folder) at which you will host brain atlas definitions, transforms and/or transformations.  
+- a provider content page (github folder) at which you will host definition files.  
 
-All definition files are auto-discovered and cached by brainaddress.org. See the <a href="docs/atlasdefinition.md">instructions to define an atlas</a>.
+All definition files are auto-discovered and cached by brainaddress.org.
 
 <script type="text/javascript">
 function lookup(evt) {

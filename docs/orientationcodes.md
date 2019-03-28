@@ -1,6 +1,6 @@
 ---
 layout: default
-title: "Brain Addressing System - Orientation codes"
+title: "Orientation codes"
 ---
 
 # Anatomical orientation codes
@@ -8,7 +8,7 @@ title: "Brain Addressing System - Orientation codes"
 Anatomical orientation codes describe the spatial orientation of the brain in its 
 default position, i.e. when the subject is looking ahead.
 There are three orientation axes for which single-letter orientation code-pairs are defined.
-- The left-right axis, with code-pair [L, R]
+- The left-right axis (seen from the subject's perspective), with code-pair [L, R]
 - The posterior-anterior axis, with code-pair [P, A]
 - The inferior-superior axis, with code-pair [I, S]
 
@@ -30,5 +30,5 @@ a lot of tutorials have been written on this subject.
 - https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/Orientation%20Explained
 
 If you use Nifti volume files, then the Nifti standard requires that the anatomical
-orientration of the data in real-world coordinates is RAS+. 
-However, more often than not, this requirement is ignored.
+orientation of the data in real-world coordinates is RAS+. 
+However, quite often this requirement gets ignored.

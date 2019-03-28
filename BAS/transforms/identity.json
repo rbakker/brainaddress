@@ -1,0 +1,5 @@
+{
+  "name": "identity transform",
+  "description": "The identity transform is used to state that the template brains of two atlases are equal, after both are converted to the BAS-default choices of mm-units, RAS-orientation and center-origin. Example: sba.ABA_v3 = hbp.AMBA. The transform has no parameters.",
+  "params": {}
+}

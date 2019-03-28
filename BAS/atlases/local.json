@@ -1,0 +1,12 @@
+{
+  "name":"Local atlas template, used for data that hasn't been registered to any atlas.",
+  "species":"any",
+  "boundingBox": {
+    "lpiCorner": [0,0,0],
+    "rasCorner": [1,1,1]
+  },
+  "atlasUrl": "https://github.com/rbakker/brainaddress/blob/master/BAS/atlases",
+  "definingCitations": [],
+  "version": "1.0.0",
+  "release": "stable"
+}
