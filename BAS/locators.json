@@ -1,0 +1,21 @@
+{
+  "label": {
+    "description": "The label locator is used to refer to a labelled part of the brain, such as a brain region.",
+    "parameters": {
+      "parcellation": {
+        "type": "string",
+        "description": "Acronym of the label volume that the second parameter refers to. The key must be present in the 'labelVolumes' dictionary in the atlas definition file."
+      },
+      "region": {
+        "type": "string",
+        "description": "Acronym of the labelled part of the brain. It must be present in the 'acr2index' dictionary of the labelVolume."
+      }
+    }
+  },
+  "vertex": {
+    "description": "The vertex locator is used to refer to a vertex on a surface mesh.",
+    "parameters": {
+      
+    }
+  }
+}

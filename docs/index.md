@@ -1,17 +1,22 @@
 ---
 layout: default
-title: "Brain Addressing System"
+title: Brain Addressing System
+crumbtitle: BAS
 ---
 
 # The Brain Addressing System (BAS)
 
-A *brain address* is a pointer to a well-defined *location* in a well-defined *brain atlas*.
+A *brain address* is a pointer to a well-defined *location* in a well-defined *template brain* or *brain atlas*.
 The *location* part can be as simple as an x,y,z-coordinate or brain region acronym.
 The *brain atlas* part can be as simple as the combination of two acronyms:
 that of the *brain atlas provider*, and that of an atlas that the provider defines.
 For example, the address
 `brainaddress:sba/ABA_v3?origin=bregma#1,2,3`
 points to coordinate (1,2,3) in atlas *ABA_v3* hosted by provider *sba*, using *bregma* as the origin.
+
+To quickly understand the brainaddress concept, let's draw the analogy with addressing a location on a planet in our solar system. It could look like  
+`planetaddress:nasa/earth?origin=greenwhich#51.843,5.863`  
+Here, *nasa* is the provider of *planet definitions*, *earth* is the selected *planet*, *origin=greenwhich* is the selected *origin* on earth (defined by the provider) and *#51.843,5.863* contains the (latitude, longitude)-location of the address. We don't usually go hiking on other planets and therefore we don't need a definition this lengthy for positions on earth. But for brain data the situation is different, since every brain is a different planet.
 
 Skip the long read, paste a brain address here to resolve it: <input type="text" size="100" onchange="lookup(event)"/>
 

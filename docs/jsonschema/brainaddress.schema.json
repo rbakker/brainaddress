@@ -1,0 +1,183 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://brainaddress.org/jsonschema/brainaddress.schema.json",
+  "title": "Brain addressing system json-schema",
+  "description": "Brain Addressing System json-schema, to be used by BAS-providers when defining atlases, landmarks, transforms, locators and modalities.",
+  "definitions": {
+    "t_shorthand": {
+      "description": "A shorthand string notation to represent provider-defined classes, typically in the form providerAcronym.className.",
+      "type": "string"      
+    },
+    "t_coord": {
+      "type": "array",
+      "items": {
+        "type": "number" ,
+        "minItems": 3,
+        "maxItems": 3      
+      }
+    },
+    "t_orientation": {
+      "description": "Three letter code that indicates the anatomical orientation of the three coordinate axes. It must contain, in arbitrary order, one of L(eft), R(ight), one of P(osterior), A(nterior), and one of I(nferior), S(uperior), whereby the subject is assumed to have the top of its head in the superior direction, and to be looking in the anterior direction.",
+      "type": "string",
+      "maxLength": 3
+    },
+    "t_units": {
+      "description": "String that represents the units of the three real-world coordinate axes. It may start with a single number or with three numbers joined by 'x', and it must end with one of 'nm','um','mm','m'. Examples: '5x5x10mm', '2.54cm'. When using three numbers, they represent the unit in the left-right, posterior-anterior and inferior-superior dimension, respectively.",
+      "type": "string",
+      "maxLength": 32
+    },
+    "t_boundingBox": {
+      "description": "Defines a coordinate system by specifying two anatomical coordinates: the left-posterior-inferior corner and the right-anterior-superior corner. Together they define a bounding-box and origin. If a coordinate of the lpiCorner is larger than the corresponding coordinate of the rasCorner, then that indicates an axis reversal.",
+      "type": "object",
+      "properties": {
+        "lpiCorner": {
+          "description": "The coordinates in mm of the [left,posterior,inferior]-corner (in that order) of the bounding box.",
+          "type": "t_coord"
+        },
+        "rasCorner": {
+          "description": "The coordinates in mm of the [right,anterior,superior]-corner (in that order) of the bounding box.",
+          "type": "t_coord"
+        },
+        "comment": {
+          "description": "Comment on the choice of bounding box (and implicit origin). Example: 'Real-world extent of the T1 image, with the corner of the 0-th voxel as the origin.'",
+          "type": "string"
+        }
+      },
+      "required": ["lpiCorner","rasCorner"]
+    },
+    "t_landmarkClass": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "The id of the landmark, unique for this provider. Keep it short.",
+          "type": "string",
+          "maxLength": 16
+        },
+        "name": {
+          "description": "Longer name (aim for 60 characters) that identifies the landmark.",
+          "type": "string",
+          "maxLength": 96
+        },
+        "definition": {
+          "description": "Defininition of this landmark, for example (simplified) 'Intersection of the midsaggital plane and the anterior commissure'.",
+          "type": "string"          
+        },
+        "recipe": {
+          "description": "Define how this landmark can be spotted in new data.",
+          "type": "string"
+        }
+      }
+    },
+    "t_landmark": {
+      "type": "object",
+      "properties": {
+        "landmark": {
+          "description": "The landmark-class that this landmark is an instance of.",
+          "anyOf": [
+            { "$ref": "#/definitions/t_landmarkClass" },
+            { "$ref": "#/definitions/t_shorthand" }
+          ]
+        },
+        "coordinate": {
+          "description": "The real-world coordinate of the landmark in (the bounding-box of) this atlas.",
+          "type": { "$ref": "#/definitions/t_coord" }
+        },
+        "comment": {
+          "description": "Comment on the choice of landmark coordinate.",
+          "type": "string"
+        }
+      }
+    },
+    "t_landmarkList": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/t_landmark" }
+    },
+    "t_atlasClass": {
+      "description": "Atlas class, including a bounding-box and optional imaging modalities.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "The id/acronym of the brain atlas. It must be short (aim for below 10 characters) and consist of alpha-numeric characters including minuses and underscores. The id may end with a major version number, preceded by ‘_v’. Example: ABA_v3. See also the version field.",
+          "type": "string",
+          "maxLength": 16
+        },
+        "boundingBox": {
+          "$ref": "#/definitions/t_boundingBox"
+        },
+        "name": {
+          "description": "Longer name (aim for 60 characters) that identifies the atlas. It should rather not mention the animal species. Example: ‘DTI template of FirstAuthor et al. (2019)’.",
+          "type": "string",
+          "maxLength": 96
+        },
+        "species": {
+          "description": "The short English name of the animal species that the atlas applies to.",
+          "type": "string",
+          "enum": ["cat","dog","ferret","human","macaque","marmoset","mouse","pig","rat","sheep"]            
+        },
+        "subSpecies": {
+          "description": "The English name of the animal sub-species that the atlas applies to. Examples: sprague dawley, cynomolgus.",
+          "type": "string"
+        },
+        "strain": {
+          "description": "The (genetic) strain of the animal that the atlas applies to. Example: C57Bl/6J.",
+          "type": "string"
+        },
+        "landmarks": {
+          "description": "List of (anatomical) landmarks defined for this atlas. Each landmark has an id, name, description and coordinate",
+          "type": { "$ref": "#/definitions/t_landmark" }
+        },
+        "modalities": {
+          "description": "List of imaging modalities (incuding masks and annotations) that are available for this atlas.",
+          "type": { "$ref": "#/definitions/t_modalityList" }
+        },
+        "surfaces": {
+          "description": "List of surface-meshes that are available for this atlas.",
+          "type": { "$ref": "#/definitions/t_surfaceList" }
+        },          
+        "nativeOrientation": {
+          "description": "The native anatomical orientation of this atlas (+x, +y, +z).",
+          "type": { "$ref": "#/definitions/t_orientation" },
+          "default": "RAS"
+        },
+        "nativeUnits": {
+          "description": "The native units of this atlas.",
+          "type": { "$ref": "#/definitions/t_units" },
+          "default": "mm"
+        }
+      },
+      "required":["id","boundingBox","species"]
+    },
+    "t_space": {
+      "description": "Space definition, on the bases of a trivial mapping to an atlas.",
+      "type": "object",
+      "properties": {
+        "atlas": {
+          "anyOf": [
+            { "$ref": "#/definitions/t_atlasClass" },
+            { "$ref": "#/definitions/t_shorthand" }
+          ]
+        },
+        "origin": {
+          "description":"The anatomical landmark that corresponds to real-world coordinate (0,0,0). This landmark should be one of the landmarks defined by the selected atlas.",
+          "type": { 
+            "anyOf": [
+              { "$ref": "#/definitions/t_landmark" },
+              { "$ref": "#/definitions/t_shorthand" }
+            ]
+          },
+          "maxLength": 16
+        },
+        "orientation": {
+          "description": "The anatomical orientation of the data in this space (+x, +y, +z).",
+          "type": { "$ref": "#/definitions/t_orientation" },
+          "default": "RAS"
+        },
+        "units": {
+          "description": "The real-world units of this data.",
+          "type": { "$ref": "#/definitions/t_units" },
+          "default": "mm"
+        }
+      }
+    }
+  }
+}

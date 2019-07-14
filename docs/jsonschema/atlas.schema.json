@@ -1,0 +1,155 @@
+Status: DEPRECATED, BUT MAY CONTAIN SOME USEFUL CONCEPT SUCH AS PROVENANCE
+{
+  "title": "BAS atlas files",
+  "description": "BAS atlas files: used by BAS-providers to defined brain atlases.",
+  "definitions": {
+    "t_spaceString": {
+      "description": "See brainaddress.org for how to write a space object as a shorthand string.",
+      "type": "string"
+    },
+    "t_spaceObject": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "The local `id` of this space. If omitted, the `atlas` field is used, or if `space` is defined as a shorthand string, that is used.",
+          "type": "string"
+        },
+        "atlas": {
+          "description": "The name of the atlas(-space) that the data is aligned with. This can be 'local' for unaligned data, or otherwise a brainaddress.org atlas in provider.atlas notation. Use provider 'my' for atlases that are not defined at brainaddress.org.",
+          "type": "string"
+        },
+        "orientation": {
+          "description": "The (closest) anatomical orientation of the three positive coordinate axes, after transformation to real world space, expressed in three-letter RAS-codes. Default is RAS.",
+          "type": "string"
+        },
+        "origin": {
+          "description": "The landmark that the point (0,0,0) in real-world space corresponds to. It must be one of the landmarks defined by the selected atlas at brainaddress.org. For 'local' space, this property is ignored.",
+          "type": "string"          
+        },
+        "units": {
+          "description": "List of units for each of x, y and z separately.",
+          "anyOf": [{
+            "$ref": "#/definitions/t_unit"
+          },{
+            "$ref": "#/definitions/t_unitArray"
+          }]
+        },
+        "voxelAlignment": {
+          "description": "Defines whether the voxel2real matrix applies to the center of voxels (default) or to the corner of voxels (the corner in the [-i,-j,-k] direction).",
+          "type": "string",
+          "enum": ["center", "corner"]
+        },
+        "voxel2real": {
+          "description": "The affine matrix that transforms voxel coordinates to real-world coordinates. Use only if the data file itself does not (correctly) define this matrix.",
+          "type": "array"
+        },
+        "nifti_voxel2real": {
+          "description": "Nifti volume files may contain multiple affine matrices: sform, qform and/or pixdim. By default, the first valid matrix (in aforementioned order) is used.",
+          "type": "string",
+          "enum": ["sform", "qform", "pixdim"]
+        }
+      },
+      "required": ["atlas"]      
+    },
+    "t_unit": {
+      "description": "The unit of the data after transformation to real-world space. It applies to x, y and z. It may start with a number (not recommended) and must end with one of 'nm','um','mm' (default),'m'",
+      "type": "string"
+    },
+    "t_unitArray": {
+      "type": "array",
+      "items": { 
+        "$ref": "#/definitions/t_unit"
+      }      
+    },
+    "t_transformation": {
+      "description": "Additional transformation parameters are defined for the selected transform at brainaddress.org.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "The local `id` of this transformation. If omitted, the from, to and transform fields are used, formatted as `from_TO_to_USING_transform`.",
+          "type": "string"          
+        },
+        "from": {
+          "description": "Name of the atlas-space to transform from. Usually the same as the atlas used in the 'space' property.",
+          "type": "string"
+        },
+        "to": {
+          "description": "Name of the atlas-space to transform to. Usually an provider.atlas defined at brainadress.org.",
+          "type": "string"
+        },
+        "transform": {
+          "description": "The transform used to by this transformation. This must be in brainaddress.org provider.transform notation.",
+          "type": "string"
+        }
+      },
+      "required": ["from","to","transform"]
+    },
+    "t_transformationArray": {
+      "description": "List of transformations.",
+      "type": "array",
+      "items": { 
+        "$ref": "#/definitions/t_transformation"
+      }              
+    },
+    "t_content": {
+      "description": "Additional content fields are defined for the selected contentType at brainaddress.org.",
+      "type": "object",
+      "properties": {
+        "modality": {
+          "description": "The modality of the data, such as T1, T2*, Nissl, etc. Use if no contentType is selected.",
+          "type": "string"
+        },
+        "contentType": {
+          "description": "The content type of the volumetric data. This must be in brainaddress.org provider.contentType notation."
+        }
+      }      
+    },
+    "t_provenance": {
+      "description": "Additional provenance fields are defined for the selected provStandard at brainaddress.org.",
+      "type": "object",
+      "properties": {
+        "creationDate": {
+          "description": "Creation date of the volumetric data, formatted as a timestamp in ISO 8601 format (YYYY-MM-DDThh:mm:ss).",
+          "type": "string"
+        },
+        "freeText": {
+          "description": "Free text field to describe the data provenance. Use if no provenance standard is selected.",
+          "type": "string"          
+        },
+        "provStandard": {
+          "description": "Standard that this provenance description adheres to. This must be in brainaddress.org provider.provStandard notation.",
+          "type": "string"
+        }
+      },
+      "required": ["creationDate"]      
+    }
+  },
+  "type": "object",
+  "properties": {
+    "space": {
+      "description": "The reference space that the data is aligned with/registered to. If space is a string, the string represents a brainaddress.org shorthand.",
+      "anyOf": [{
+        "$ref": "#/definitions/t_spaceString"
+      },{
+        "$ref": "#/definitions/t_spaceObject"
+      }]
+    },
+    "transformation": {
+      "description": "Transformation between two spaces.",
+      "anyOf": [{
+        "$ref": "#/definitions/t_transformation"
+      },{
+        "$ref": "#/definitions/t_transformationArray"
+      }]
+    },
+    "content": {
+      "description": "The way that this content should be interpreted. In nifti-speak this is called 'intent'.",
+      "$ref": "#/definitions/t_content"
+    },
+    "provenance": {
+      "description": "The data provenance (history of operators and operations that resulted in the current data set.",
+      "$ref": "#/definitions/t_provenance"
+    }
+  },
+  "required": ["space"]
+}
